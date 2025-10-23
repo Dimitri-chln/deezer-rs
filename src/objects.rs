@@ -1,8 +1,10 @@
 mod album;
 mod artist;
+mod genre;
 
 pub use album::Album;
 pub use artist::Artist;
+pub use genre::Genre;
 
 use reqwest::Url;
 use serde::de::DeserializeOwned;
@@ -21,8 +23,13 @@ pub trait Object: DeserializeOwned {
 pub trait IncompleteObject<O: Object> {
     fn id(&self) -> Id;
 
-    async fn full(&self, client: &DeezerClient) -> crate::Result<O> {
-        let endpoint = O::endpoint(self.id());
-        client.get(endpoint).await
+    fn full(&self, client: &DeezerClient) -> impl Future<Output = crate::Result<O>> + Send
+    where
+        Self: Sync,
+    {
+        async {
+            let endpoint = O::endpoint(self.id());
+            client.get(endpoint).await
+        }
     }
 }

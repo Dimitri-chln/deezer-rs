@@ -2,10 +2,10 @@ use reqwest::Url;
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 
-use crate::objects::{Artist, IncompleteObject, Object};
+use crate::objects::{Artist, Genre, IncompleteObject, Object};
 use crate::{Id, List};
 
-/// An album object
+/// type: "album"
 #[derive(Deserialize)]
 pub struct Album {
     /// The Deezer album id
@@ -68,9 +68,6 @@ pub struct Album {
     pub artist: AlbumArtist,
     /// list of track
     pub tracks: List<AlbumTrack>,
-
-    /// "album"
-    r#type: String,
 }
 
 impl Object for Album {
@@ -94,6 +91,7 @@ pub enum AlbumExplicitContent {
     PartiallyNoAdviceAvailable = 7,
 }
 
+// type: "genre"
 #[derive(Deserialize)]
 pub struct AlbumGenre {
     /// The genre's Deezer id
@@ -102,9 +100,6 @@ pub struct AlbumGenre {
     pub name: String,
     /// The url of the genre picture. Add 'size' parameter to the url to change size. Can be 'small', 'medium', 'big', 'xl'
     pub picture: Url,
-
-    /// "genre"
-    r#type: String,
 }
 
 impl IncompleteObject<Genre> for AlbumGenre {
@@ -113,6 +108,7 @@ impl IncompleteObject<Genre> for AlbumGenre {
     }
 }
 
+// type: "artist"
 #[derive(Deserialize)]
 pub struct AlbumContributor {
     /// The artist's Deezer id
@@ -140,9 +136,6 @@ pub struct AlbumContributor {
 
     /// ?
     pub role: String,
-
-    /// "artist"
-    r#type: String,
 }
 
 impl IncompleteObject<Artist> for AlbumContributor {
@@ -151,10 +144,12 @@ impl IncompleteObject<Artist> for AlbumContributor {
     }
 }
 
+#[derive(Deserialize)]
 pub struct AlbumFallback {
     // TODO
 }
 
+// type: "artist"
 #[derive(Deserialize)]
 pub struct AlbumArtist {
     /// The artist's Deezer id
@@ -173,9 +168,6 @@ pub struct AlbumArtist {
     pub picture_xl: Url,
     /// API Link to the top of this artist
     pub tracklist: Url,
-
-    /// "artist"
-    r#type: String,
 }
 
 impl IncompleteObject<Artist> for AlbumArtist {
@@ -184,6 +176,9 @@ impl IncompleteObject<Artist> for AlbumArtist {
     }
 }
 
+#[derive(Deserialize)]
 pub struct AlbumTrack {
+    /// The track's Deezer id
+    pub id: Id,
     // TODO
 }

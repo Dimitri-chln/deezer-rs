@@ -3,6 +3,7 @@ use serde::Deserialize;
 
 use crate::{Id, objects::Object};
 
+// type: "artist"
 #[derive(Deserialize)]
 pub struct Artist {
     /// The artist's Deezer id
@@ -31,9 +32,6 @@ pub struct Artist {
     pub radio: bool,
     /// API Link to the top of this artist
     pub tracklist: Url,
-
-    /// "artist"
-    r#type: String,
 }
 
 impl Object for Artist {
