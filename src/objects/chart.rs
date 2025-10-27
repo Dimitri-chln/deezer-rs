@@ -1,5 +1,6 @@
 use serde::Deserialize;
 
+use crate::image::Picture;
 use crate::objects::traits;
 use crate::objects::{Album, Artist, Track, track::TrackExplicitContent};
 use crate::{Id, ListWithTotal, Url};
@@ -80,16 +81,8 @@ pub struct ChartTrackArtist {
     pub name: String,
     /// The url of the artist on Deezer
     pub link: Url,
-    /// The url of the artist picture. Add 'size' parameter to the url to change size. Can be 'small', 'medium', 'big', 'xl'
-    pub picture: Url,
-    /// The url of the artist picture in size small.
-    pub picture_small: Url,
-    /// The url of the artist picture in size medium.
-    pub picture_medium: Url,
-    /// The url of the artist picture in size big.
-    pub picture_big: Url,
-    /// The url of the artist picture in size xl.
-    pub picture_xl: Url,
+    #[serde(flatten)]
+    pub picture: Picture,
     /// true if the artist has a smartradio
     pub radio: bool,
     /// API Link to the top of this artist

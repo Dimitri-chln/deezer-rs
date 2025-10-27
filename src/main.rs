@@ -5,7 +5,7 @@ use deezer_rs::objects::*;
 async fn main() {
     let deezer = DeezerClient::new();
 
-    let object = deezer.get::<Chart>(0).await.unwrap();
+    let object = deezer.get::<Album>(302127).await.unwrap();
 
-    println!("{object:?}");
+    println!("{:?}", object.artist.picture);
 }

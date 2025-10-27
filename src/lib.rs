@@ -1,5 +1,6 @@
 mod client;
 mod error;
+mod image;
 mod list;
 pub mod objects;
 

@@ -1,12 +1,12 @@
-use crate::Url;
+use deezer_rs_macros::{DeezerIncomplete, DeezerObject};
 use serde::Deserialize;
 
-use crate::Id;
-use crate::objects::traits;
+use crate::{Id, Url, image::Picture};
 
 /// An artist object
-#[derive(Deserialize, Debug)]
+#[derive(DeezerObject, Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
+#[deezer(endpoint = "/artist")]
 pub struct Artist {
     /// The artist's Deezer id
     pub id: Id,
@@ -39,12 +39,9 @@ pub struct Artist {
     r#type: String,
 }
 
-impl traits::Object for Artist {
-    const ENDPOINT: &str = "/artist";
-}
-
-#[derive(Deserialize, Debug)]
+#[derive(DeezerIncomplete, Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
+#[deezer(object = Artist)]
 pub struct Contributor {
     /// The artist's Deezer id
     pub id: Id,
@@ -54,16 +51,8 @@ pub struct Contributor {
     pub link: Url,
     /// The share link of the artist on Deezer
     pub share: Url,
-    /// The url of the artist picture. Add 'size' parameter to the url to change size. Can be 'small', 'medium', 'big', 'xl'
-    pub picture: Url,
-    /// The url of the artist picture in size small.
-    pub picture_small: Url,
-    /// The url of the artist picture in size medium.
-    pub picture_medium: Url,
-    /// The url of the artist picture in size big.
-    pub picture_big: Url,
-    /// The url of the artist picture in size xl.
-    pub picture_xl: Url,
+    #[serde(flatten)]
+    pub picture: Picture,
     /// true if the artist has a smartradio
     pub radio: bool,
     /// API Link to the top of this artist
@@ -74,12 +63,4 @@ pub struct Contributor {
 
     #[allow(dead_code)]
     r#type: String,
-}
-
-impl traits::IncompleteObject for Contributor {
-    type FullObject = Artist;
-
-    fn id(&self) -> Id {
-        self.id
-    }
 }
