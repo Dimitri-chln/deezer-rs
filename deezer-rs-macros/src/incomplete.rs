@@ -14,7 +14,10 @@ pub fn derive_inner(input: DeriveInput) -> syn::Result<TokenStream> {
     for meta in args.inner.iter() {
         if meta.path.is_ident("object") {
             full_object_type = Some(&meta.value);
+            continue;
         }
+
+        return Err(syn::Error::new(meta.span(), "unexpected value"));
     }
 
     let full_object_type = full_object_type
