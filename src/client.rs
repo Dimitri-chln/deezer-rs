@@ -1,6 +1,6 @@
-use reqwest::Url;
+use crate::{Id, Url};
 
-use crate::objects::Object;
+use crate::objects::traits;
 
 #[derive(Debug, Clone)]
 pub struct DeezerClient {
@@ -15,7 +15,10 @@ impl DeezerClient {
         }
     }
 
-    pub(crate) async fn get<O: Object>(&self, url: Url) -> crate::Result<O> {
+    async fn get_from_url<O>(&self, url: Url) -> crate::Result<O>
+    where
+        O: traits::Object,
+    {
         let result = self
             .client
             .get(url)
@@ -26,5 +29,15 @@ impl DeezerClient {
             .await?;
 
         Ok(result)
+    }
+
+    pub async fn get<O>(&self, id: Id) -> crate::Result<O>
+    where
+        O: traits::Object,
+    {
+        let endpoint = O::endpoint(id);
+        let object = self.get_from_url(endpoint).await?;
+
+        Ok(object)
     }
 }
